@@ -1,6 +1,12 @@
 from langchain_mistralai import ChatMistralAI
-from langchain.agents.react.agent import create_react_agent
-from langchain.agents.agent import AgentExecutor
+try:
+    # Modern LangChain (0.2+)
+    from langchain.agents import create_react_agent, AgentExecutor
+except ImportError:
+    # Fallback for alternative package layouts
+    from langchain_community.agent_toolkits.load_tools import load_tools
+    from langchain.agents import AgentExecutor, create_react_agent
+
 from langchain_core.prompts import PromptTemplate
 from core.skill_registry import get_all_skills
 
