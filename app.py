@@ -1,6 +1,6 @@
 import os
 import streamlit as st
-from langchain_community.callbacks import StreamlitCallbackHandler
+from langchain_core.messages import HumanMessage
 from core.agent_engine import build_agent_executor
 
 st.set_page_config(page_title="Skill-Based Tool-Calling Agent", page_icon="🤖", layout="wide")
@@ -40,16 +40,14 @@ if mistral_key and tavily_key:
             st.markdown(prompt)
 
         with st.chat_message("assistant"):
-            st_callback = StreamlitCallbackHandler(st.container(), expand_new_thoughts=True)
-            executor = build_agent_executor(mistral_key)
-            
-            response = executor.invoke(
-                {"input": prompt},
-                {"callbacks": [st_callback]}
-            )
-            
-            output_text = response["output"]
-            st.markdown(output_text)
-            st.session_state.messages.append({"role": "assistant", "content": output_text})
+            with st.spinner("Thinking & calling skills..."):
+                agent = build_agent_executor(mistral_key)
+                
+                response = agent.invoke({"messages": [HumanMessage(content=prompt)]})
+                
+                output_text = response["messages"][-1].content
+                
+                st.markdown(output_text)
+                st.session_state.messages.append({"role": "assistant", "content": output_text})
 else:
     st.warning("Please provide both your Mistral API Key and Tavily API Key in the sidebar to activate the agent.")
