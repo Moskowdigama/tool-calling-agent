@@ -24,6 +24,11 @@ with st.sidebar:
     st.markdown("- 🧮 `calculate`: Safe Python math execution")
     st.markdown("- 🌤️ `get_weather_info`: Live weather reports")
 
+# Cache agent initialisation to prevent rebuilding on every rerun/message
+@st.cache_resource(show_spinner=False)
+def get_cached_agent(api_key: str):
+    return build_agent_executor(api_key)
+
 if mistral_key and tavily_key:
     os.environ["TAVILY_API_KEY"] = tavily_key
     
@@ -41,7 +46,7 @@ if mistral_key and tavily_key:
 
         with st.chat_message("assistant"):
             with st.spinner("Thinking & calling skills..."):
-                agent = build_agent_executor(mistral_key)
+                agent = get_cached_agent(mistral_key)
                 
                 response = agent.invoke({"messages": [HumanMessage(content=prompt)]})
                 

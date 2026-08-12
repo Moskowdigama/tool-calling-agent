@@ -4,7 +4,7 @@ from langgraph.prebuilt import create_react_agent
 from core.skill_registry import get_all_skills
 
 def build_agent_executor(mistral_api_key: str):
-    """Builds and returns a modern LangGraph ReAct agent executor with date awareness."""
+    """Builds and returns a modern LangGraph ReAct agent executor with live system date context."""
     llm = ChatMistralAI(
         model="mistral-small-latest",
         mistral_api_key=mistral_api_key,
@@ -13,8 +13,8 @@ def build_agent_executor(mistral_api_key: str):
     
     skills = get_all_skills()
     
-    current_date = datetime.now().strftime("%B %Y")
-    system_prompt = f"You are a helpful assistant with real-time skills. The current date is {current_date}. Always ensure search queries for news, sports, or events include the relevant current year/month."
+    today_str = datetime.now().strftime("%A, %B %d, %Y")
+    system_prompt = f"You are an assistant with tool access. Today's date is strictly {today_str}. When asked for the date or weather, rely on exact facts and tools."
     
     agent = create_react_agent(
         model=llm,
