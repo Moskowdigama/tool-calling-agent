@@ -1,5 +1,6 @@
 from langchain_mistralai import ChatMistralAI
-from langchain.agents import create_react_agent, AgentExecutor
+from langchain.agents.react.agent import create_react_agent
+from langchain.agents.agent import AgentExecutor
 from langchain_core.prompts import PromptTemplate
 from core.skill_registry import get_all_skills
 
