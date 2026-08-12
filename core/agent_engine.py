@@ -1,16 +1,10 @@
 from langchain_mistralai import ChatMistralAI
-from langchain_core.prompts import PromptTemplate
+from langchain.agents import AgentExecutor, create_tool_calling_agent
+from langchain_core.prompts import ChatPromptTemplate
 from core.skill_registry import get_all_skills
 
-# Fallback imports for different LangChain releases
-try:
-    from langchain.agents import create_react_agent, AgentExecutor
-except ImportError:
-    from langchain.agents.react.agent import create_react_agent
-    from langchain.agents.agent import AgentExecutor
-
 def build_agent_executor(mistral_api_key: str):
-    """Builds and returns a ReAct agent executor wired with registered skills."""
+    """Builds and returns a Tool-Calling agent executor wired with registered skills."""
     llm = ChatMistralAI(
         model="mistral-small-latest",
         mistral_api_key=mistral_api_key,
@@ -19,29 +13,13 @@ def build_agent_executor(mistral_api_key: str):
     
     skills = get_all_skills()
     
-    template = """Answer the following questions as best as you can. You have access to the following tools:
-
-{tools}
-
-Use the following format:
-
-Question: the input question you must answer
-Thought: you should always think about what to do
-Action: the action to take, should be one of [{tool_names}]
-Action Input: the input to the action
-Observation: the result of the action
-... (this Thought/Action/Action Input/Observation can repeat N times)
-Thought: I now know the final answer
-Final Answer: the final answer to the original input question
-
-Begin!
-
-Question: {input}
-Thought:{agent_scratchpad}"""
-
-    prompt = PromptTemplate.from_template(template)
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "You are an intelligent assistant with access to specialized tools. Use them to answer questions accurately."),
+        ("human", "{input}"),
+        ("placeholder", "{agent_scratchpad}"),
+    ])
     
-    agent = create_react_agent(
+    agent = create_tool_calling_agent(
         llm=llm,
         tools=skills,
         prompt=prompt
