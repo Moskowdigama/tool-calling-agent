@@ -50,7 +50,7 @@ if mistral_key and tavily_key:
                 
                 today_str = datetime.now().strftime("%A, %B %d, %Y")
                 system_instruction = SystemMessage(
-                    content=f"You are a helpful AI assistant with tool access. Today's current date is {today_str}. Always use available tools for real-time questions like weather or recent facts."
+                    content=f"You are a helpful AI assistant with tool access. Today's date is strictly {today_str}. Always use available tools for real-time questions like weather or recent facts."
                 )
                 
                 response = agent.invoke({
