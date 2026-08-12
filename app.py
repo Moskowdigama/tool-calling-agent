@@ -8,7 +8,6 @@ st.set_page_config(page_title="Skill-Based Tool-Calling Agent", page_icon="🤖"
 st.title("🤖 Autonomous Skill-Based Tool-Calling Agent")
 st.markdown("An intelligent ReAct agent leveraging modular skills for web search, math, and live weather calculations.")
 
-# Retrieve secrets or sidebar inputs
 mistral_key = st.secrets.get("MISTRAL_API_KEY") if "MISTRAL_API_KEY" in st.secrets else None
 tavily_key = st.secrets.get("TAVILY_API_KEY") if "TAVILY_API_KEY" in st.secrets else None
 
@@ -28,16 +27,13 @@ with st.sidebar:
 if mistral_key and tavily_key:
     os.environ["TAVILY_API_KEY"] = tavily_key
     
-    # Initialize chat history
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Display chat history
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    # User input prompt
     if prompt := st.chat_input("Ask me to search the web, calculate math, or check weather..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
