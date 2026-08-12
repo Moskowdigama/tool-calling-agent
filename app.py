@@ -1,6 +1,7 @@
 import os
+from datetime import datetime
 import streamlit as st
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 from core.agent_engine import build_agent_executor
 
 st.set_page_config(page_title="Skill-Based Tool-Calling Agent", page_icon="🤖", layout="wide")
@@ -24,7 +25,6 @@ with st.sidebar:
     st.markdown("- 🧮 `calculate`: Safe Python math execution")
     st.markdown("- 🌤️ `get_weather_info`: Live weather reports")
 
-# Cache agent initialisation to prevent rebuilding on every rerun/message
 @st.cache_resource(show_spinner=False)
 def get_cached_agent(api_key: str):
     return build_agent_executor(api_key)
@@ -48,7 +48,14 @@ if mistral_key and tavily_key:
             with st.spinner("Thinking & calling skills..."):
                 agent = get_cached_agent(mistral_key)
                 
-                response = agent.invoke({"messages": [HumanMessage(content=prompt)]})
+                today_str = datetime.now().strftime("%A, %B %d, %Y")
+                system_instruction = SystemMessage(
+                    content=f"You are a helpful AI assistant with tool access. Today's current date is {today_str}. Always use available tools for real-time questions like weather or recent facts."
+                )
+                
+                response = agent.invoke({
+                    "messages": [system_instruction, HumanMessage(content=prompt)]
+                })
                 
                 output_text = response["messages"][-1].content
                 
