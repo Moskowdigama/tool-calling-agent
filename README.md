@@ -69,7 +69,3 @@ cd tool-calling-agent
    streamlit run app.py
 
 
----
-
-You can copy the block above and paste it directly into your GitHub repository's `README.md` editor online.
-
