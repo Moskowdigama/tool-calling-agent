@@ -283,8 +283,5 @@ Built by Shanky as part of the GenAI Engineer learning path.
 · Tavily
 · Streamlit
 
-```
-
----
 
 
