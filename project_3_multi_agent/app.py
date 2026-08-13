@@ -20,36 +20,19 @@ st.set_page_config(
 st.title("🤖 Multi-Agent Research System")
 st.caption("Searcher → Reader → Writer → Critic")
 
-# Sidebar for API keys
-with st.sidebar:
-    st.header("🔑 API Keys")
+# Load API keys from Streamlit secrets
+try:
+    mistral_key = st.secrets["MISTRAL_API_KEY"]
+    tavily_key = st.secrets["TAVILY_API_KEY"]
     
-    mistral_key = st.text_input(
-        "Mistral AI API Key",
-        type="password",
-        help="Get your API key from https://console.mistral.ai/"
-    )
+    # Set as environment variables
+    os.environ["MISTRAL_API_KEY"] = mistral_key
+    os.environ["TAVILY_API_KEY"] = tavily_key
     
-    tavily_key = st.text_input(
-        "Tavily API Key",
-        type="password",
-        help="Get your API key from https://tavily.com/"
-    )
-    
-    if mistral_key:
-        os.environ["MISTRAL_API_KEY"] = mistral_key
-    if tavily_key:
-        os.environ["TAVILY_API_KEY"] = tavily_key
-    
-    st.divider()
-    st.markdown("### 🚀 About")
-    st.markdown("""
-    This system uses **4 specialized agents**:
-    1. 🔍 **Searcher** - Finds relevant sources
-    2. 📖 **Reader** - Extracts content from URLs  
-    3. ✍️ **Writer** - Synthesizes research into a report
-    4. 🎯 **Critic** - Reviews and improves the report
-    """)
+except KeyError as e:
+    st.error(f"❌ Missing secret: {e}")
+    st.info("Please add your API keys in Streamlit Cloud -> Settings -> Secrets")
+    st.stop()
 
 # Main interface
 query = st.text_area(
@@ -64,12 +47,6 @@ with col1:
 
 # Process the query
 if run_button:
-    if not mistral_key:
-        st.error("❌ Please enter your Mistral AI API key in the sidebar")
-        st.stop()
-    if not tavily_key:
-        st.error("❌ Please enter your Tavily API key in the sidebar")
-        st.stop()
     if not query:
         st.error("❌ Please enter a research query")
         st.stop()
@@ -157,7 +134,7 @@ if run_button:
                     st.json(log)
                     
         except Exception as e:
-            st.error(f"❌ Error running pipeline: {str(e)}")
+            st.error(f"❌ Error: {str(e)}")
             st.exception(e)
 
 # Footer
