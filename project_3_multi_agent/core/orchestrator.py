@@ -10,11 +10,11 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_core.output_parsers import StrOutputParser
 from langchain_mistralai import ChatMistralAI
 
-from .state import MultiAgentState, create_initial_state
-from ..agents.searcher import searcher_agent
-from ..agents.reader import reader_agent
-from ..agents.writer import writer_agent
-from ..agents.critic import critic_agent
+from core.state import MultiAgentState, create_initial_state
+from agents.searcher import searcher_agent
+from agents.reader import reader_agent
+from agents.writer import writer_agent
+from agents.critic import critic_agent
 
 
 class MultiAgentOrchestrator:

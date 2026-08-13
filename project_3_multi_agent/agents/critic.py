@@ -5,7 +5,7 @@ Critic Agent: Reviews and scores the draft report, suggests improvements.
 from typing import Dict, Any
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from ..core.state import MultiAgentState
+from core.state import MultiAgentState
 
 
 def critic_agent(state: MultiAgentState, llm) -> MultiAgentState:

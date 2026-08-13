@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from typing import Dict, Any, List
 
-from ..core.state import MultiAgentState
+from core.state import MultiAgentState
 
 
 def extract_text_from_url(url: str, max_chars: int = 5000) -> str:

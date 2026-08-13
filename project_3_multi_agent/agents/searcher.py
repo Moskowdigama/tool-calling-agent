@@ -6,7 +6,7 @@ import os
 from typing import Dict, Any, List
 from tavily import TavilyClient
 
-from ..core.state import MultiAgentState
+from core.state import MultiAgentState
 
 
 def searcher_agent(state: MultiAgentState, llm) -> MultiAgentState:

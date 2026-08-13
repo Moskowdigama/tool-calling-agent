@@ -5,7 +5,7 @@ Writer Agent: Synthesizes research into a coherent report.
 from typing import Dict, Any
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from ..core.state import MultiAgentState
+from core.state import MultiAgentState
 
 
 def writer_agent(state: MultiAgentState, llm) -> MultiAgentState:
