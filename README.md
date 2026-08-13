@@ -24,7 +24,7 @@ tool-calling-agent/
 
 ## 🚀 Project 2: Single-Agent Tool Calling System
 
-**Live Demo:** [Single-Agent System](https://your-project2-link.streamlit.app) *(replace with your actual link)*
+**Live Demo:** [Single-Agent System](https://tool-calling-agent-5cgnuhafkdl2munkctttaj.streamlit.app/) 
 
 A ReAct-based autonomous agent that can:
 - 🔍 **Search the web** using Tavily API
@@ -283,22 +283,6 @@ Built by Shanky as part of the GenAI Engineer learning path.
 · Tavily
 · Streamlit
 
-```
-
----
-
-## 📤 Push the README
-
-```bash
-# Create the README file
-cat > README.md << 'EOF'
-[paste the entire README content above]
-EOF
-
-# Stage, commit, and push
-git add README.md
-git commit -m "docs: add comprehensive README for both projects"
-git push origin main
 ```
 
 ---
